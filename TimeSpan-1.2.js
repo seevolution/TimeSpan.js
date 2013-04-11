@@ -197,6 +197,14 @@
             return Math.floor(msecs / msecPerDay);
         };
 
+        this.toString = function(){
+            return (this.days() > 0 ? this.days() + '.' : '') +
+                (this.hours() < 10 ? '0' : '') + this.hours() + ':' +
+                (this.minutes() < 10 ? '0' : '') + this.minutes() + ':' + 
+                (this.seconds() < 10 ? '0' : '') + this.seconds()
+                ;
+        };
+
         // Misc. Functions
         this.getVersion = function () {
             return version;

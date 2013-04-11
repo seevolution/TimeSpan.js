@@ -1,1 +1,5 @@
-Please see TimeSpan.txt for documentation.
+
+Added toString() method for prettyprinting timespans.
+
+
+Please see TimeSpan.txt for original documentation.
