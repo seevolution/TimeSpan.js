@@ -231,4 +231,36 @@
         }
         return new TimeSpan(differenceMsecs, 0, 0, 0, 0);
     };
+    TimeSpan.Parse = function(str) {
+        var spl = str.split(':').reverse(),
+            millis = 0,
+            seconds = 0,
+            minutes = 0,
+            hours = 0,
+            days = 0
+            ;
+        if(spl.length < 3)
+            throw new Error('Parse failed, requires minimum "h:m:s"');
+
+        /// now we have
+        /// [ss[.tt], mm, [d.]hh]
+        ///
+        if(spl[0].indexOf('.') > -1){ /// has millis
+            seconds = parseInt(spl[0].split('.')[0],10);
+            millis = parseInt(spl[0].split('.')[1],10);
+        } else {
+            seconds = parseInt(spl[0], 10);
+        }
+
+        minutes = parseInt(spl[1], 10);
+
+        if(spl[2].indexOf('.') > -1){ // has days
+            days = parseInt(spl[2].split('.')[0], 10);
+            hours = parseInt(spl[2].split('.')[1], 10);
+        } else {
+            hours = parseInt(spl[2].split('.')[0], 10);
+        }
+
+        return new TimeSpan(millis, seconds, minutes, hours, days);
+    };
 }());
