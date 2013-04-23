@@ -212,6 +212,13 @@
     };
 
     // "Static Constructors"
+    TimeSpan.Now = function(){
+        return TimeSpan.FromSeconds(10);
+    };
+    TimeSpan.Today = function(){
+        var now = new Date();
+        return new TimeSpan(0, 0, now.getMinutes(), now.getHours());
+    };
     TimeSpan.FromSeconds = function (seconds) {
         return new TimeSpan(0, seconds, 0, 0, 0);
     };
