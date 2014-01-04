@@ -126,19 +126,19 @@
         // Functions to interact with other TimeSpans
         this.isTimeSpan = true;
         this.add = function (otherTimeSpan) {
-            if (!otherTimeSpan.isTimeSpan) {
+            if (!otherTimeSpan || !otherTimeSpan.isTimeSpan) {
                 return;
             }
             msecs += otherTimeSpan.totalMilliseconds();
         };
         this.subtract = function (otherTimeSpan) {
-            if (!otherTimeSpan.isTimeSpan) {
+            if (!otherTimeSpan || !otherTimeSpan.isTimeSpan) {
                 return;
             }
             msecs -= otherTimeSpan.totalMilliseconds();
         };
         this.equals = function (otherTimeSpan) {
-            if (!otherTimeSpan.isTimeSpan) {
+            if (!otherTimeSpan || !otherTimeSpan.isTimeSpan) {
                 return;
             }
             return msecs === otherTimeSpan.totalMilliseconds();
@@ -213,6 +213,10 @@
                 ;
         };
 
+        this.clone = function(){
+            return TimeSpan.FromTimeSpan(this);
+        };
+
         // Misc. Functions
         this.getVersion = function () {
             return version;
@@ -220,11 +224,15 @@
     };
 
     // "Static Constructors"
+    TimeSpan.FromTimeSpan = function(timeSpan){
+        return TimeSpan.FromSeconds(timeSpan.totalSeconds());
+    };
     TimeSpan.Now = function(){
-        return TimeSpan.FromSeconds(10);
+        return TimeSpan.FromSeconds(1);
     };
     TimeSpan.Today = function(){
         var now = new Date();
+        // return new TimeSpan(0, 60, 0, 0);
         return new TimeSpan(0, 0, now.getMinutes(), now.getHours());
     };
     TimeSpan.FromSeconds = function (seconds) {
@@ -247,6 +255,19 @@
         return new TimeSpan(differenceMsecs, 0, 0, 0, 0);
     };
     TimeSpan.Parse = function(str) {
+        if(typeof(str)!=='string'){
+            throw new Error('Must be a string.');
+        }
+
+        str = str || '';
+
+        /// special cases
+        ///
+        if(str.toLowerCase() === 'today')
+            return TimeSpan.Today();
+        else if(str.toLowerCase() === 'now')
+            return TimeSpan.Now();
+
         var spl = str.split(':').reverse(),
             millis = 0,
             seconds = 0,
